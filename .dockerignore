@@ -1,0 +1,16 @@
+.env
+.git
+.github
+.vscode
+vendor
+tests
+writable/*.sqlite
+writable/*.db
+writable/cache/*
+writable/logs/*
+writable/session/*
+writable/debugbar/*
+writable/uploads/*
+phpunit
+phpunit.xml
+phpunit.dist.xml
