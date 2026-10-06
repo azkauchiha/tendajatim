@@ -1,10 +1,3 @@
-databases:
-  - name: tendajatim-db
-    databaseName: tendajatim
-    user: tendajatim
-    plan: basic-256mb
-    region: singapore
-
 services:
   - type: web
     name: tendajatim
@@ -18,6 +11,4 @@ services:
       - key: CI_ENVIRONMENT
         value: production
       - key: DATABASE_URL
-        fromDatabase:
-          name: tendajatim-db
-          property: connectionString
+        sync: false

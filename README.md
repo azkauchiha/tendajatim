@@ -62,15 +62,16 @@ Untuk pengembangan tanpa virtual host, jalankan `php spark serve` dan buka `http
 
 ## Deployment ke Render melalui GitHub
 
-Repository menyertakan `render.yaml` dan `Dockerfile` untuk deployment otomatis dari GitHub. Render menjalankan PHP/Apache dan PostgreSQL; database SQLite lokal tidak digunakan untuk deployment.
+Repository menyertakan `render.yaml` dan `Dockerfile` untuk deployment otomatis dari GitHub. Paket tanpa biaya menggunakan Render Web Service Free dan Neon PostgreSQL Free; database SQLite lokal tidak digunakan untuk deployment.
 
-1. Buat repository GitHub dan push kode aplikasi. Jangan unggah `.env`, database lokal, atau rahasia.
-2. Di Render pilih **New > Blueprint**, hubungkan repository GitHub, lalu terapkan `render.yaml`.
-3. Blueprint membuat web service Free dan PostgreSQL `basic-256mb` persisten. **PostgreSQL tersebut berbayar**; periksa biaya Render saat membuat service. Jangan lanjutkan jika belum menyetujui biaya.
-4. Setelah deployment selesai, buka alamat `onrender.com` dan buat akun awal di `/setup`. Buat kata sandi unik dan kuat untuk Super Admin serta Admin.
-5. Opsional: isi `APP_BASE_URL` di Environment service jika menggunakan domain khusus. Tanpa itu, aplikasi memakai `RENDER_EXTERNAL_URL`.
+1. Pastikan repository GitHub sudah berisi kode terbaru. Jangan unggah `.env`, database lokal, atau rahasia.
+2. Buat database PostgreSQL gratis di Neon dan salin connection string pooled yang disediakan. Connection string adalah rahasia; jangan masukkan ke GitHub atau kirim lewat chat.
+3. Di Render pilih **New > Blueprint**, hubungkan repository GitHub, lalu terapkan `render.yaml`.
+4. Saat diminta, masukkan connection string Neon sebagai `DATABASE_URL`. Jika service sudah terbuat, tambahkan nilainya pada **Render > service > Environment**. Jangan mengganti nama variabel.
+5. Setelah deployment selesai, buka alamat `onrender.com` dan buat akun awal di `/setup`. Buat kata sandi unik dan kuat untuk Super Admin serta Admin.
+6. Opsional: isi `APP_BASE_URL` di Environment service jika menggunakan domain khusus. Tanpa itu, aplikasi memakai `RENDER_EXTERNAL_URL`.
 
-Setiap push ke branch yang terhubung akan memicu build/deploy otomatis. Render menjalankan migrasi database saat container mulai. Backup/export data sebelum menghapus database atau mengganti environment produksi.
+Setiap push ke branch yang terhubung akan memicu build/deploy otomatis. Render menjalankan migrasi database saat container mulai. Render Free menidurkan service setelah tidak ada trafik, jadi permintaan pertama dapat memerlukan waktu untuk bangun. Paket gratis memiliki batas kuota, tidak menjamin uptime produksi, dan filesystem web tidak persisten; database Neon menjadi penyimpanan data persisten terpisah. Periksa batas terbaru kedua layanan sebelum digunakan. Batasi database Neon agar hanya dapat diakses dari service yang diperlukan.
 
 Deployment memerlukan ekstensi PHP `intl` dan `pgsql`, yang sudah disiapkan pada Docker image.
 

@@ -214,6 +214,8 @@ class Database extends Config
             $this->default['database'] = rawurldecode(ltrim($parts['path'], '/'));
             $this->default['DBDriver'] = 'Postgre';
             $this->default['port'] = (int) ($parts['port'] ?? 5432);
+            parse_str($parts['query'] ?? '', $connectionOptions);
+            $this->default['sslmode'] = $connectionOptions['sslmode'] ?? 'require';
         } else {
             $this->default['hostname'] = env('database.default.hostname', '127.0.0.1');
             $this->default['username'] = env('database.default.username', 'root');
